@@ -1,17 +1,16 @@
-﻿namespace Tetris
+﻿using Tetris.FileSystem;
+using Tetris.Interfaces;
+using Tetris.OutPut;
+
+namespace Tetris
 {
-    internal class Program
+    public class Program
     {
         static void Main(string[] args)
         {
-            var bl = new BL(new Parser());
-
-            bl.ReadFigure();
-            bl.Move();
-            bl.Show();
+            Handler.MainHandler(args, new MainOutPut(), new MainFileSystem());
             Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
+            Console.WriteLine(args[0]);
         }
     }
 }

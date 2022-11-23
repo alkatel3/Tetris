@@ -6,7 +6,7 @@
         public int Height;
         public char[,] Parse(string input)
         {
-            var result = input.Split('\n');
+            var result = input.Split("\n");
             Weight = result[1].Length;
             Height = result.Length - 1;
 

@@ -1,0 +1,6 @@
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\bin\Debug\net6.0\CoverletSourceRootsMapping
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\obj\Debug\net6.0\TetrisTests2.csproj.AssemblyReference.cache
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\obj\Debug\net6.0\TetrisTests2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\obj\Debug\net6.0\TetrisTests2.AssemblyInfoInputs.cache
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\obj\Debug\net6.0\TetrisTests2.AssemblyInfo.cs
+C:\Users\Dell\OneDrive\Рабочий стол\Studying\Test\Tetris\TetrisTests2\obj\Debug\net6.0\TetrisTests2.csproj.CoreCompileInputs.cache
