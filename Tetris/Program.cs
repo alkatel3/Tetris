@@ -1,8 +1,4 @@
-﻿using Tetris.FileSystem;
-using Tetris.Interfaces;
-using Tetris.OutPut;
-
-namespace Tetris
+﻿namespace Tetris
 {
     public class Program
     {

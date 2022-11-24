@@ -1,69 +1,87 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tetris.OutPut;
-using Tetris.FileSystem;
+using Moq;
 
 namespace Tetris.Tests
 {
     [TestClass()]
     public class HandlerTests
     {
-        MockOutPut main = null!;
-        MockFileSystem fs = null!;
+        Mock<MainOutPut> main = null!;
+        Mock<MainFileSystem> fs = null!;
+        List<string> messages=null!;
 
         [TestInitialize]
         public void SetUp()
         {
-            main = new MockOutPut();
-            fs = new MockFileSystem();
+            main = new();
+            fs = new();
+            messages = new List<string>();
         }
 
         [TestMethod()]
         public void ItShouldShowHowToUseInstractionIfThereIsNoInputFileParam()
         {
-            Handler.MainHandler(Array.Empty<string>(), main, fs);
+            main.Setup(m=>m.printLine(Messages.NoArgs)).Callback(() => messages.Add(Messages.NoArgs));
 
-            Assert.AreEqual(1, main.messages.Count);
-            Assert.AreEqual(Messages.NoArgs, main.messages[0]);
+            Handler.MainHandler(Array.Empty<string>(), main.Object, fs.Object);
+
+            Assert.AreEqual(1, messages.Count);
+            Assert.AreEqual(Messages.NoArgs,messages[0]);
         }
 
         [TestMethod()]
         public void ItShouldCheckIfInputFileExistsAndItNotThanShowAnMessage()
         {
             var input = new string[] { "input.txt" };
+            main.Setup(m => m.printLine(Messages.InputFileDoesNotExist)).Callback(() => messages.Add(Messages.InputFileDoesNotExist));
+            fs.Setup(m => m.IfFileExist(input[0])).Returns(false);
 
-            Handler.MainHandler(input, main, fs);
+            Handler.MainHandler(input, main.Object, fs.Object);
 
-            Assert.AreEqual(1, main.messages.Count);
-            Assert.AreEqual(Messages.InputFileDoesNotExist, main.messages[0]);
+            Assert.AreEqual(1, messages.Count);
+            Assert.AreEqual(Messages.InputFileDoesNotExist, messages[0]);
         }
 
         [TestMethod()]
         public void ItShouldParseInputFileAndThrowAnErrorIfIsWrong()
         {
             var input = new string[] { "input.txt" };
-            fs.FileIsExist = true;
-            Handler.MainHandler(input, main, fs);
+            main.Setup(m => m.printLine(Messages.InputFileContainsSmthWrong)).Callback(() => messages.Add(Messages.InputFileContainsSmthWrong));
+            fs.Setup(m => m.IfFileExist(input[0])).Returns(true);
+            fs.Setup(m => m.ReadFileAsString(input[0])).Returns("Wrong input file body");
 
-            Assert.AreEqual(1, main.messages.Count);
-            Assert.AreEqual(Messages.InputFileContainsSmthWrong, main.messages[0]);
+            Handler.MainHandler(input, main.Object, fs.Object);
+
+            Assert.AreEqual(1, messages.Count);
+            Assert.AreEqual(Messages.InputFileContainsSmthWrong, messages[0]);
         }
         [TestMethod()]
         public void ItShouldPrintFinalBoardState()
         {
+            var inputBoard = "7 9\n" +
+                             "..ppp....\n" +
+                             "..p.p....\n" +
+                             "..ppp....\n" +
+                             ".........\n" +
+                             "##...####\n" +
+                             "##...####\n" +
+                             "##.#.####";
+            var expected = ".........\n" +
+                           ".........\n" +
+                           ".........\n" +
+                           "..ppp....\n" +
+                           "##p.p####\n" +
+                           "##ppp####\n" +
+                           "##.#.####\n";
             var input = new string[] { "input.txt" };
-            fs.FileIsExist = true;
-            fs.FileIsCorrect = true;
-            Handler.MainHandler(input, main, fs);
-            var expected =".........\n" +
-                          ".........\n" +
-                          ".........\n" +
-                          "..ppp....\n" +
-                          "##p.p####\n" +
-                          "##ppp####\n" +
-                          "##.#.####\n";
+            main.Setup(m => m.printLine(expected)).Callback(() => messages.Add(expected));
+            fs.Setup(m => m.IfFileExist(input[0])).Returns(true);
+            fs.Setup(m => m.ReadFileAsString(input[0])).Returns(inputBoard);
 
-            Assert.AreEqual(1, main.messages.Count);
-            Assert.AreEqual(expected, main.messages[0]);
+            Handler.MainHandler(input, main.Object, fs.Object);
+
+            Assert.AreEqual(1, messages.Count);
+            Assert.AreEqual(expected, messages[0]);
         }
     }
 }

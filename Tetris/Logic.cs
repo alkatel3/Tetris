@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using Tetris.Interfaces;
 
 namespace Tetris
 {
