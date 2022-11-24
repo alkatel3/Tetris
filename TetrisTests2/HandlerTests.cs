@@ -83,5 +83,55 @@ namespace Tetris.Tests
             Assert.AreEqual(1, messages.Count);
             Assert.AreEqual(expected, messages[0]);
         }
+
+        [TestMethod()]
+        public void ItShouldPrintAllBoardState()
+        {
+            var inputBoard = "7 9\n" +
+                             ".........\n" +
+                             "..ppp....\n" +
+                             "..p.p....\n" +
+                             "..ppp....\n" +
+                             "##...####\n" +
+                             "##...####\n" +
+                             "##.#.####";
+            var expected0 = "Step 0\n" +
+                            ".........\n" +
+                            "..ppp....\n" +
+                            "..p.p....\n" +
+                            "..ppp....\n" +
+                            "##...####\n" +
+                            "##...####\n" +
+                            "##.#.####\n";
+            var expected1 = "Step 1\n" +
+                            ".........\n" +
+                            ".........\n" +
+                            "..ppp....\n" +
+                            "..p.p....\n" +
+                            "##ppp####\n" +
+                            "##...####\n" +
+                            "##.#.####\n";
+            var expected2 = "Step 2\n" +
+                            ".........\n" +
+                            ".........\n" +
+                            ".........\n" +
+                            "..ppp....\n" +
+                            "##p.p####\n" +
+                            "##ppp####\n" +
+                            "##.#.####\n";
+            var input = new string[] { "input.txt", "-printEachGeneration" };
+            main.Setup(m => m.printLine(expected0+'\n')).Callback(() => messages.Add(expected0));
+            main.Setup(m => m.printLine(expected1+'\n')).Callback(() => messages.Add(expected1));
+            main.Setup(m => m.printLine(expected2+'\n')).Callback(() => messages.Add(expected2));
+            fs.Setup(m => m.IfFileExist(input[0])).Returns(true);
+            fs.Setup(m => m.ReadFileAsString(input[0])).Returns(inputBoard);
+
+            Handler.MainHandler(input, main.Object, fs.Object);
+
+            Assert.AreEqual(3, messages.Count);
+            Assert.AreEqual(expected0, messages[0]);
+            Assert.AreEqual(expected1, messages[1]);
+            Assert.AreEqual(expected2, messages[2]);
+        }
     }
 }

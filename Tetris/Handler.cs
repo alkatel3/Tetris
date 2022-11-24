@@ -6,7 +6,7 @@ namespace Tetris
     {
         public static void MainHandler(string[] args, IOutPut output, IFileSystem fs)
         {
-            if (args == Array.Empty<string>())
+            if (args.Length==0)
             {
                 output.printLine(Messages.NoArgs);
                 return;
@@ -18,7 +18,7 @@ namespace Tetris
                 output.printLine(Messages.InputFileDoesNotExist);
                 return;
             }
-
+            var printEachGeneration = args.Length > 1 && args[1] == "-printEachGeneration";
             var Parser = new Parser();
             char[,]? board;
             try
@@ -38,8 +38,19 @@ namespace Tetris
             else
             {
                 var Board = new Logic(board, Parser.Height, Parser.Weight);
-                Board.Move();
-                output.printLine(Board.PrintGameBoard());
+                if (printEachGeneration)
+                {
+                    var game=Board.MoveAndReturnAllStep();
+                    foreach(var generation in game)
+                    {
+                        output.printLine(generation +'\n');
+                    }
+                }
+                else
+                {
+                    Board.Move();
+                    output.printLine(Board.PrintGameBoard());
+                }
             }
         }
     }

@@ -66,6 +66,26 @@ namespace Tetris
                 Figure = step;
             }
         }
+
+        public List<string> MoveAndReturnAllStep()
+        {
+            var result = new List<string>();
+            int step = 0;
+            while (true)
+            {
+                var StateOfFigure = Step();
+                var StateOfBoard = $"Step {step}\n" + PrintGameBoard();
+                result.Add(StateOfBoard);
+                if (Figure[0].Equals(StateOfFigure[0]))
+                {
+                    break;
+                }
+                Figure = StateOfFigure;
+                step++;
+            }
+            return result;
+        }
+
         public string PrintGameBoard()
         {
             var result = "";

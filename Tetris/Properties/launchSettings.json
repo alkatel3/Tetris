@@ -2,7 +2,7 @@
   "profiles": {
     "Tetris": {
       "commandName": "Project",
-      "commandLineArgs": "input.txt"
+      "commandLineArgs": "input.txt -printEachGeneration"
     }
   }
 }
